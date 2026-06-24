@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnostic de préparation TIPS | Conseil en approvisionnement autochtone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & VARIABLES ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #06B188;
+      --teal-dark:   #049a77;
+      --teal-light:  #e6f9f4;
+      --teal-glow:   rgba(6,177,136,0.15);
+      --charcoal:    #333030;
+      --charcoal-mid:#4a4646;
+      --charcoal-soft:#6b6868;
+      --off-white:   #f8f7f5;
+      --white:       #ffffff;
+      --rule:        rgba(51,48,48,0.12);
+      --rule-teal:   rgba(6,177,136,0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      color: var(--charcoal);
+      background: var(--white);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    h1, h2, h3, h4 { font-family: 'Playfair Display', serif; line-height: 1.2; }
+
+    /* ── UTILITIES ── */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+    .section-label {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    /* ── HEADER ── */
+    #nf-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--rule);
+      height: 68px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .nf-header-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 28px;
+      height: 68px;
+      display: flex; align-items: center; gap: 0;
+    }
+    /* Logo */
+    .nf-header-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+      margin-right: 40px;
+      flex-shrink: 0;
+    }
+    .nf-logo-img {
+      width: 44px; height: 44px;
+      object-fit: contain;
+      display: block;
+    }
+    .nf-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .nf-logo-text em {
+      font-style: italic;
+      color: var(--teal);
+    }
+    /* Scroll nav tabs */
+    .nf-header-nav {
+      display: flex; align-items: center; gap: 4px;
+      flex: 1;
+    }
+    .nf-nav-tab {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--charcoal-soft);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 3px;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .nf-nav-tab:hover,
+    .nf-nav-tab.nf-active { color: var(--teal); background: var(--teal-light); }
+    /* Header CTA */
+    .nf-header-cta {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--teal);
+      text-decoration: none;
+      border: 1.5px solid var(--teal);
+      padding: 8px 18px;
+      border-radius: 3px;
+      transition: background 0.2s, color 0.2s;
+      flex-shrink: 0;
+      margin-left: 16px;
+      white-space: nowrap;
+    }
+    .nf-header-cta:hover { background: var(--teal); color: var(--white); }
+    /* Burger button */
+    .nf-burger {
+      display: none;
+      flex-direction: column; justify-content: center; gap: 5px;
+      width: 40px; height: 40px;
+      background: none; border: none; cursor: pointer;
+      margin-left: 12px; padding: 6px; flex-shrink: 0;
+    }
+    .nf-burger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--charcoal);
+      border-radius: 2px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .nf-burger.nf-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nf-burger.nf-open span:nth-child(2) { opacity: 0; }
+    .nf-burger.nf-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    /* Mobile drawer */
+    .nf-mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--white);
+      border-top: 1px solid var(--rule);
+      padding: 12px 20px 20px;
+    }
+    .nf-mobile-nav.nf-open { display: flex; }
+    .nf-mobile-tab {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--charcoal-mid);
+      text-decoration: none;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--rule);
+      transition: color 0.2s;
+    }
+    .nf-mobile-tab:last-child { border-bottom: none; }
+    .nf-mobile-tab:hover { color: var(--teal); }
+    .nf-mobile-cta { color: var(--teal); margin-top: 8px; }
+    /* Active section indicator via scroll spy */
+    @media (max-width: 860px) {
+      .nf-header-nav { display: none; }
+      .nf-header-cta { display: none; }
+      .nf-burger     { display: flex; margin-left: auto; }
+      #nf-header     { height: auto; min-height: 60px; }
+      .nf-header-inner { height: 60px; }
+    }
+    @media (max-width: 480px) {
+      .nf-logo-text { display: none; }
+    }
+
+    /* legacy nav rules removed — header uses #nf-header and .nf-header-* classes */
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 108px 28px 80px;
+      position: relative;
+      overflow: hidden;
+      background: var(--charcoal);
+    }
+    .hero-texture {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(6,177,136,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 80% at 10% 90%, rgba(6,177,136,0.07) 0%, transparent 60%);
+    }
+    /* diagonal accent line */
+    .hero-line {
+      position: absolute; top: 0; right: 18%;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(6,177,136,0.25) 30%, rgba(6,177,136,0.25) 70%, transparent);
+      z-index: 0;
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1080px; margin: 0 auto; width: 100%;
+    }
+    .hero-eyebrow {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block; width: 32px; height: 1.5px; background: var(--teal);
+    }
+    #hero h1 {
+      font-size: clamp(2.1rem, 5vw, 3.6rem);
+      color: var(--white);
+      max-width: 820px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+    }
+    #hero h1 em {
+      font-style: italic;
+      color: var(--teal);
+    }
+    .hero-sub {
+      margin-top: 26px;
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      color: rgba(255,255,255,0.72);
+      max-width: 620px;
+      line-height: 1.75;
+      font-weight: 300;
+      opacity: 0; animation: fadeUp 0.7s 0.6s forwards;
+    }
+    .hero-actions {
+      margin-top: 42px;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 20px;
+      opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--teal);
+      color: var(--white);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 16px 34px;
+      border-radius: 3px;
+      transition: background 0.2s, transform 0.15s;
+      border: none; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .btn-primary svg { flex-shrink: 0; }
+    .hero-note {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+      font-style: italic;
+    }
+    .hero-stat-row {
+      margin-top: 72px;
+      display: flex; flex-wrap: wrap; gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 36px;
+      opacity: 0; animation: fadeUp 0.7s 1s forwards;
+    }
+    .hero-stat {
+      flex: 1; min-width: 200px;
+      padding: 0 32px 0 0;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      margin-right: 32px;
+    }
+    .hero-stat:last-child { border-right: none; margin-right: 0; }
+    .hero-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--teal);
+    }
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+
+    /* ── REALITY SECTION ── */
+    #reality {
+      padding: 96px 28px;
+      background: var(--off-white);
+    }
+    #reality .inner {
+      max-width: 1080px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start;
+    }
+    #reality h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+      color: var(--charcoal);
+      font-weight: 700;
+    }
+    #reality h2 span { color: var(--teal); display: block; }
+    .reality-lead {
+      margin-top: 20px;
+      font-size: 1.05rem;
+      color: var(--charcoal-mid);
+      line-height: 1.8;
+    }
+    .reality-close {
+      margin-top: 28px;
+      font-size: 0.95rem;
+      color: var(--charcoal-soft);
+      font-style: italic;
+      padding-left: 18px;
+      border-left: 3px solid var(--teal);
+      line-height: 1.7;
+    }
+    .challenge-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 18px;
+    }
+    .challenge-list li {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--teal);
+      padding: 18px 20px;
+      border-radius: 3px;
+      font-size: 0.95rem;
+      color: var(--charcoal-mid);
+      line-height: 1.55;
+      transition: box-shadow 0.2s;
+    }
+    .challenge-list li:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.07); }
+    .challenge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--teal);
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── SHIFT SECTION ── */
+    #shift {
+      padding: 96px 28px;
+      background: var(--charcoal);
+      position: relative; overflow: hidden;
+    }
+    .shift-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 60% 60% at 85% 50%, rgba(6,177,136,0.08) 0%, transparent 70%);
+    }
+    #shift .inner {
+      position: relative; z-index: 1;
+      max-width: 1080px; margin: 0 auto;
+      text-align: center;
+    }
+    #shift h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+      color: var(--white);
+      max-width: 700px; margin: 12px auto 0;
+    }
+    .shift-grid {
+      margin-top: 56px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+    }
+    .shift-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 36px 26px;
+      text-align: left;
+      transition: background 0.2s;
+    }
+    .shift-card:hover { background: rgba(6,177,136,0.08); }
+    .shift-icon {
+      width: 44px; height: 44px;
+      background: var(--teal-glow);
+      border: 1px solid var(--rule-teal);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+    }
+    .shift-icon svg { color: var(--teal); }
+    .shift-card h4 {
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .shift-card p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+    }
+    .shift-coda {
+      margin-top: 52px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.7);
+      max-width: 560px; margin-left: auto; margin-right: auto;
+    }
+    .shift-coda strong { color: var(--teal); font-style: normal; }
+
+    /* ── OFFER SECTION ── */
+    #offer {
+      padding: 96px 28px;
+      background: var(--white);
+    }
+    #offer .inner {
+      max-width: 1080px; margin: 0 auto;
+    }
+    #offer .offer-header {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end;
+      margin-bottom: 60px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--rule);
+    }
+    #offer h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+      color: var(--charcoal);
+      font-weight: 700;
+    }
+    .offer-intro {
+      font-size: 1rem;
+      color: var(--charcoal-mid);
+      line-height: 1.8;
+    }
+    .pillars {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+    }
+    .pillar {
+      background: var(--off-white);
+      padding: 36px;
+      border-top: 3px solid transparent;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .pillar:hover {
+      border-color: var(--teal);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+    }
+    .pillar-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--teal);
+      opacity: 0.35;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .pillar h3 {
+      font-size: 1.08rem;
+      color: var(--charcoal);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .pillar ul {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .pillar ul li {
+      font-size: 0.9rem;
+      color: var(--charcoal-mid);
+      line-height: 1.55;
+      padding-left: 16px;
+      position: relative;
+    }
+    .pillar ul li::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--teal);
+      font-size: 0.8rem;
+    }
+
+    /* ── DELIVERABLES ── */
+    #deliverables {
+      padding: 80px 28px;
+      background: var(--teal);
+    }
+    #deliverables .inner {
+      max-width: 1080px; margin: 0 auto;
+      display: grid; grid-template-columns: auto 1fr; gap: 72px; align-items: center;
+    }
+    #deliverables h2 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      color: var(--white);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .deliverable-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .deliverable {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 20px 22px;
+      border-radius: 3px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .deliverable-check {
+      width: 22px; height: 22px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .deliverable-check svg { color: var(--white); }
+    .deliverable p {
+      font-size: 0.92rem;
+      color: var(--white);
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    /* ── FIT SECTION ── */
+    #fit {
+      padding: 96px 28px;
+      background: var(--off-white);
+    }
+    #fit .inner {
+      max-width: 1080px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+    }
+    #fit h2 {
+      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      color: var(--charcoal);
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+    .fit-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .fit-list li {
+      display: flex; gap: 14px; align-items: flex-start;
+      font-size: 0.97rem;
+      color: var(--charcoal-mid);
+      line-height: 1.6;
+    }
+    .fit-check {
+      width: 22px; height: 22px;
+      background: var(--teal-light);
+      border: 1.5px solid var(--teal);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .fit-check svg { color: var(--teal); }
+    .not-fit-box {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      padding: 36px;
+    }
+    .not-fit-box h3 {
+      font-size: 1rem;
+      font-family: 'Lato', sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--charcoal-soft);
+      margin-bottom: 20px;
+    }
+    .not-fit-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 13px;
+    }
+    .not-fit-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 0.92rem;
+      color: var(--charcoal-soft);
+      line-height: 1.55;
+    }
+    .not-fit-x {
+      width: 20px; height: 20px;
+      background: rgba(51,48,48,0.07);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .not-fit-x svg { color: var(--charcoal-soft); }
+    .qualifier-note {
+      margin-top: 18px;
+      font-size: 0.82rem;
+      color: var(--charcoal-soft);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ── INVESTMENT ── */
+    #investment {
+      padding: 96px 28px;
+      background: var(--charcoal);
+    }
+    #investment .inner {
+      max-width: 1080px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+    }
+    #investment h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+      color: var(--white);
+    }
+    .investment-body {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.8;
+      margin-top: 18px;
+    }
+    .price-card {
+      background: rgba(6,177,136,0.08);
+      border: 1px solid var(--rule-teal);
+      padding: 44px;
+      position: relative;
+    }
+    .price-range {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4vw, 3.4rem);
+      color: var(--teal);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .price-unit {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.45);
+      margin-top: 8px;
+      font-style: italic;
+    }
+    .price-note {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+    }
+    .price-note strong { color: rgba(255,255,255,0.75); }
+
+    /* ── AUTHORITY CLOSE ── */
+    #authority {
+      padding: 96px 28px;
+      background: var(--white);
+    }
+    #authority .inner {
+      max-width: 760px; margin: 0 auto; text-align: center;
+    }
+    #authority h2 {
+      font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+      color: var(--charcoal);
+      margin-bottom: 24px;
+    }
+    .authority-body {
+      font-size: 1.05rem;
+      color: var(--charcoal-mid);
+      line-height: 1.85;
+      max-width: 640px; margin: 0 auto;
+    }
+    .authority-facts {
+      margin-top: 52px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px;
+    }
+    .fact {
+      background: var(--off-white);
+      padding: 30px 24px;
+      border-top: 3px solid var(--teal);
+      text-align: left;
+    }
+    .fact-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--teal);
+      line-height: 1;
+    }
+    .fact p {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--charcoal-soft);
+      line-height: 1.55;
+    }
+    .fact-source {
+      margin-top: 6px;
+      font-size: 0.73rem;
+      color: rgba(51,48,48,0.4);
+      font-style: italic;
+    }
+
+    /* ── FINAL CTA ── */
+    #cta-final {
+      padding: 100px 28px;
+      background: var(--charcoal);
+      position: relative; overflow: hidden;
+    }
+    .cta-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 70% at 50% 50%, rgba(6,177,136,0.1) 0%, transparent 70%);
+    }
+    #cta-final .inner {
+      position: relative; z-index: 1;
+      max-width: 680px; margin: 0 auto; text-align: center;
+    }
+    #cta-final h2 {
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+      color: var(--white);
+      font-weight: 700;
+    }
+    #cta-final h2 em { font-style: italic; color: var(--teal); }
+    .cta-body {
+      margin-top: 20px;
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.8;
+    }
+    #cta-final .btn-primary {
+      margin-top: 38px;
+      font-size: 0.92rem;
+      padding: 18px 40px;
+    }
+    .cta-sub {
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.35);
+      font-style: italic;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 28px;
+      background: #222020;
+      text-align: center;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.25);
+      line-height: 1.7;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .shift-grid { grid-template-columns: 1fr 1fr; }
+      .pillars { grid-template-columns: 1fr; }
+      #reality .inner,
+      #offer .offer-header,
+      #fit .inner,
+      #investment .inner { grid-template-columns: 1fr; gap: 40px; }
+      #deliverables .inner { grid-template-columns: 1fr; gap: 32px; }
+      #deliverables h2 { white-space: normal; }
+      .authority-facts { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .shift-grid { grid-template-columns: 1fr; }
+      .deliverable-grid { grid-template-columns: 1fr; }
+      .hero-stat-row { flex-direction: column; gap: 24px; }
+      .hero-stat { border-right: none; padding-right: 0; margin-right: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 24px; }
+      .hero-stat:last-child { border-bottom: none; padding-bottom: 0; }
+      nav { padding: 0 20px; }
+      .nav-cta { padding: 7px 14px; font-size: 0.76rem; }
+    }
+
+  /* ── BOT WIDGET STYLES ── */
+/* ── ALL STYLES SCOPED TO #nf-bot ── */
+
+#nf-bot {
+  --teal:      #06B188;
+  --teal-dark: #049a77;
+  --charcoal:  #333030;
+  --white:     #ffffff;
+  --off-white: #f8f7f5;
+  --rule:      rgba(51,48,48,0.10);
+
+  font-family: 'Lato', sans-serif;
+}
+
+/* ── FLOATING TRIGGER BUTTON ── */
+#nf-bot .nf-bot-trigger {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9998;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(6,177,136,0.40);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+#nf-bot .nf-bot-trigger:hover {
+  background: var(--teal-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(6,177,136,0.50);
+}
+#nf-bot .nf-bot-trigger svg {
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+#nf-bot .nf-bot-trigger .nf-icon-chat { display: block; }
+#nf-bot .nf-bot-trigger .nf-icon-close { display: none; }
+#nf-bot .nf-bot-trigger.nf-open .nf-icon-chat { display: none; }
+#nf-bot .nf-bot-trigger.nf-open .nf-icon-close { display: block; }
+
+/* Pulse ring — draws attention on first load */
+#nf-bot .nf-bot-trigger::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(6,177,136,0.40);
+  animation: nfBotPulse 2.5s ease-out infinite;
+}
+@keyframes nfBotPulse {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  70%  { transform: scale(1.3); opacity: 0; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+/* ── CHAT WINDOW ── */
+#nf-bot .nf-bot-window {
+  position: fixed;
+  bottom: 96px;
+  right: 28px;
+  z-index: 9999;
+  width: 380px;
+  max-height: 560px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  box-shadow: 0 16px 56px rgba(51,48,48,0.18);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(12px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+#nf-bot .nf-bot-window.nf-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+
+/* ── HEADER ── */
+#nf-bot .nf-bot-header {
+  background: var(--charcoal);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+#nf-bot .nf-bot-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(6,177,136,0.20);
+  border: 1.5px solid rgba(6,177,136,0.40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--teal);
+}
+#nf-bot .nf-bot-header-text {
+  flex: 1;
+}
+#nf-bot .nf-bot-name {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+}
+#nf-bot .nf-bot-status {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.45);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+#nf-bot .nf-bot-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  flex-shrink: 0;
+}
+
+/* ── MESSAGES ── */
+#nf-bot .nf-bot-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+}
+#nf-bot .nf-bot-messages::-webkit-scrollbar {
+  width: 4px;
+}
+#nf-bot .nf-bot-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+#nf-bot .nf-bot-messages::-webkit-scrollbar-thumb {
+  background: rgba(51,48,48,0.15);
+  border-radius: 2px;
+}
+
+/* Message bubbles */
+#nf-bot .nf-msg {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  max-width: 100%;
+}
+#nf-bot .nf-msg.nf-user {
+  flex-direction: row-reverse;
+}
+
+#nf-bot .nf-msg-bubble {
+  max-width: 82%;
+  padding: 11px 14px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+#nf-bot .nf-msg.nf-bot .nf-msg-bubble {
+  background: var(--off-white);
+  color: rgba(51,48,48,0.85);
+  border: 1px solid var(--rule);
+  border-bottom-left-radius: 1px;
+}
+#nf-bot .nf-msg.nf-user .nf-msg-bubble {
+  background: var(--teal);
+  color: var(--white);
+  border-bottom-right-radius: 1px;
+}
+
+/* Booking link inside bot messages */
+#nf-bot .nf-msg-bubble a {
+  color: var(--teal);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+#nf-bot .nf-msg.nf-user .nf-msg-bubble a {
+  color: var(--white);
+}
+
+/* Typing indicator */
+#nf-bot .nf-typing {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--off-white);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  border-bottom-left-radius: 1px;
+  width: fit-content;
+}
+#nf-bot .nf-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(51,48,48,0.30);
+  animation: nfTyping 1.2s infinite;
+}
+#nf-bot .nf-typing span:nth-child(2) { animation-delay: 0.2s; }
+#nf-bot .nf-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes nfTyping {
+  0%, 60%, 100% { transform: translateY(0);    opacity: 0.4; }
+  30%            { transform: translateY(-4px); opacity: 1;   }
+}
+
+/* ── INPUT ROW ── */
+#nf-bot .nf-bot-input-row {
+  padding: 12px 14px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex-shrink: 0;
+  background: var(--white);
+}
+
+#nf-bot .nf-bot-input {
+  flex: 1;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 10px 13px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.875rem;
+  color: var(--charcoal);
+  background: var(--off-white);
+  resize: none;
+  outline: none;
+  line-height: 1.5;
+  max-height: 100px;
+  transition: border-color 0.2s;
+}
+#nf-bot .nf-bot-input:focus {
+  border-color: rgba(6,177,136,0.50);
+}
+#nf-bot .nf-bot-input::placeholder {
+  color: rgba(51,48,48,0.35);
+}
+
+#nf-bot .nf-bot-send {
+  width: 38px;
+  height: 38px;
+  border-radius: 3px;
+  background: var(--teal);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+  color: var(--white);
+}
+#nf-bot .nf-bot-send:hover { background: var(--teal-dark); }
+#nf-bot .nf-bot-send:disabled {
+  background: rgba(6,177,136,0.35);
+  cursor: not-allowed;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  #nf-bot .nf-bot-window {
+    right: 12px;
+    left: 12px;
+    width: auto;
+    bottom: 88px;
+  }
+  #nf-bot .nf-bot-trigger {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header id="nf-header">
+    <div class="nf-header-inner">
+
+      <!-- Logo -->
+      <a href="#" class="nf-header-logo" aria-label="Nacia Forge home">
+        <img src="NF-1.png"
+             alt="Nacia Forge logo"
+             class="nf-logo-img"
+             width="44" height="44" />
+        <span class="nf-logo-text">Nacia <em>Forge</em></span>
+      </a>
+
+      <!-- Scroll nav -->
+      <div class="nf-header-nav" role="navigation" aria-label="Page sections">
+        <a href="#reality"     class="nf-nav-tab">Le défi</a>
+        <a href="#offer"       class="nf-nav-tab">Le diagnostic</a>
+        <a href="#nf-platform" class="nf-nav-tab">Plateforme</a>
+        <a href="#investment"  class="nf-nav-tab">Investissement</a>
+        <a href="#authority"   class="nf-nav-tab">Pourquoi maintenant</a>
+        <a href="https://blog.naciaforge.com" target="_blank" rel="noopener" class="nf-nav-tab">Blog</a>
+        <a href="/" class="nf-nav-tab">EN</a>
+      </div>
+
+      <!-- CTA -->
+      <a href="#cta-final" class="nf-header-cta">Réserver un appel</a>
+
+      <!-- Mobile burger -->
+      <button class="nf-burger" id="nf-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="nf-mobile-nav" id="nf-mobile-nav" aria-hidden="true">
+      <a href="#reality"     class="nf-mobile-tab">Le défi</a>
+      <a href="#offer"       class="nf-mobile-tab">Le diagnostic</a>
+      <a href="#nf-platform" class="nf-mobile-tab">Plateforme</a>
+      <a href="#investment"  class="nf-mobile-tab">Investissement</a>
+      <a href="#authority"   class="nf-mobile-tab">Pourquoi maintenant</a>
+      <a href="https://blog.naciaforge.com" target="_blank" rel="noopener" class="nf-mobile-tab">Blog</a>
+      <a href="/"            class="nf-mobile-tab">EN — English version</a>
+      <a href="#cta-final"   class="nf-mobile-tab nf-mobile-cta">Réserver un appel</a>
+    </div>
+  </header>
+
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-texture"></div>
+    <div class="hero-line"></div>
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Diagnostic de préparation TIPS</span>
+      <h1>
+        L'approvisionnement autochtone n'est pas un exercice de conformité — <em>c'est un défi de préparation</em>
+      </h1>
+      <p class="hero-sub">
+        La cible fédérale obligatoire de 5 % en matière d'approvisionnement autochtone est entrée pleinement en vigueur le 31 mars 2025, s'appliquant à l'ensemble des 96 ministères et organismes fédéraux. La production de rapports annuels à Services aux Autochtones Canada est désormais obligatoire. La plupart des organisations assument cette obligation, mais peu disposent des systèmes internes, des processus et des relations nécessaires pour l'honorer de manière constante et avec assurance.
+      </p>
+      <div class="hero-actions">
+        <a href="#cta-final" class="btn-primary">
+          Soumettre une demande de diagnostic TIPS
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <span class="hero-note">Conçu pour les organisations qui travaillent activement à la conformité en matière d'approvisionnement autochtone.</span>
+      </div>
+      <div class="hero-stat-row">
+        <div class="hero-stat">
+          <div class="hero-stat-num">5%</div>
+          <div class="hero-stat-label">Cible minimale obligatoire; la valeur totale des contrats fédéraux doit être attribuée annuellement à des entreprises autochtones</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">96</div>
+          <div class="hero-stat-label">Ministères et organismes fédéraux soumis aux exigences de déclaration obligatoire en vertu de l'Annexe E</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">2024–25</div>
+          <div class="hero-stat-label">Échéance de la phase 3 ; tous les ministères restants devaient atteindre ou dépasser la cible au 31 mars 2025</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════
+       REALITY
+  ══════════════════════════════════════ -->
+  <section id="reality">
+    <div class="inner">
+      <div class="reveal">
+        <span class="section-label">La réalité</span>
+        <h2>Pourquoi de nombreuses organisations <span>ne sont pas préparées</span></h2>
+        <p class="reality-lead">
+          L'approvisionnement autochtone est souvent abordé comme une cible à atteindre. En pratique, il exige un niveau de préparation organisationnelle qui va bien au-delà du suivi de la conformité.
+        </p>
+        <p class="reality-close">
+          Sans s'attaquer à ces facteurs sous-jacents, même les efforts bien intentionnés échouent — créant un risque d'audit, des cibles manquées et une confiance fragilisée auprès des entreprises et des communautés autochtones.
+        </p>
+      </div>
+      <ul class="challenge-list reveal reveal-delay-2">
+        <li>
+          <span class="challenge-num">01</span>
+          <span>Les systèmes d'approvisionnement internes ne sont pas conçus pour identifier, qualifier ou mobiliser des fournisseurs autochtones en vertu des exigences du SEAA ou du RFE</span>
+        </li>
+        <li>
+          <span class="challenge-num">02</span>
+          <span>Visibilité limitée dans le Répertoire des entreprises autochtones et le réseau de fournisseurs qu'il représente</span>
+        </li>
+        <li>
+          <span class="challenge-num">03</span>
+          <span>Lacunes dans le suivi des données contractuelles, la production de rapports obligatoires et l'auditabilité par rapport à la cible de 5 %, y compris le traitement des exceptions nécessitant l'approbation de l'administrateur général</span>
+        </li>
+        <li>
+          <span class="challenge-num">04</span>
+          <span>Inadéquation entre la conception des appels d'offres, les critères de qualification et les exigences du Programme de marchés réservés aux Autochtones du SEAA, y compris la vérification de l'admissibilité au RFE, qui a fait l'objet d'un examen important en octobre 2024</span>
+        </li>
+        <li>
+          <span class="challenge-num">05</span>
+          <span>Un déficit de confiance croissant avec les entreprises et les communautés autochtones qui ne peut être résolu par la seule politique</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════
+       SHIFT
+  ══════════════════════════════════════ -->
+  <section id="shift">
+    <div class="shift-bg"></div>
+    <div class="inner">
+      <span class="section-label reveal">La vue d'ensemble</span>
+      <h2 class="reveal reveal-delay-1">Ce n'est pas seulement une question d'approvisionnement</h2>
+
+      <div class="shift-grid">
+        <div class="shift-card reveal reveal-delay-1">
+          <div class="shift-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <h4>Politique &amp; gouvernance</h4>
+          <p>Les directives du Conseil du Trésor, les exigences de déclaration de SAC et la conformité au SEAA ne peuvent être gérées sans structures de gouvernance claires et responsabilités assignées.</p>
+        </div>
+        <div class="shift-card reveal reveal-delay-2">
+          <div class="shift-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+          </div>
+          <h4>Systèmes opérationnels</h4>
+          <p>Les flux de travail d'approvisionnement, la conception des appels d'offres, les processus de vérification du RFE et les systèmes de données doivent être alignés avant que la cible de 5 % puisse être atteinte de manière constante.</p>
+        </div>
+        <div class="shift-card reveal reveal-delay-3">
+          <div class="shift-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h4>Stratégie fournisseurs</h4>
+          <p>Identifier et mobiliser des fournisseurs autochtones qualifiés — y compris ceux inscrits au RFE et sur les listes des traités modernes — exige une approche proactive fondée sur les relations.</p>
+        </div>
+        <div class="shift-card reveal reveal-delay-4">
+          <div class="shift-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h4>Relations &amp; confiance</h4>
+          <p>La réconciliation économique est le fondement de cette politique. Les organisations qui réussissent bâtissent des relations authentiques et durables avec les entreprises et les communautés autochtones.</p>
+        </div>
+      </div>
+
+      <p class="shift-coda reveal">
+        Les organisations qui réussissent ne traitent pas l'approvisionnement autochtone comme une initiative autonome.<br>
+        Elles y voient un <strong>changement structurel et relationnel.</strong><br>
+        Ce changement commence par la clarté.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════
+       OFFER
+  ══════════════════════════════════════ -->
+  <section id="offer">
+    <div class="inner">
+      <div class="offer-header">
+        <div class="reveal">
+          <span class="section-label">Le diagnostic</span>
+          <h2>Diagnostic de préparation TIPS &amp; approvisionnement autochtone</h2>
+        </div>
+        <p class="offer-intro reveal reveal-delay-2">
+          Nous commençons par aider votre organisation à comprendre où elle en est aujourd'hui par rapport aux exigences du SEAA, à la cible obligatoire de 5 % en vertu de l'Annexe E de la Directive sur la gestion de l'approvisionnement, et aux obligations de déclaration établies par SAC. La Direction TIPS continue de faire évoluer les exigences en matière de politique et de programme — le diagnostic garantit que vos systèmes et processus sont alignés maintenant et positionnés pour s'adapter aux changements à venir.
+        </p>
+      </div>
+
+      <div class="pillars">
+        <div class="pillar reveal">
+          <div class="pillar-num">01</div>
+          <h3>Gouvernance &amp; alignement stratégique</h3>
+          <ul>
+            <li>Alignement avec les directives du Conseil du Trésor et les exigences de cible obligatoire de SAC</li>
+            <li>Structures de responsabilisation et obligations liées au plan d'approvisionnement</li>
+            <li>Préparation à la production de rapports annuels de performance à SAC</li>
+          </ul>
+        </div>
+        <div class="pillar reveal reveal-delay-1">
+          <div class="pillar-num">02</div>
+          <h3>Systèmes &amp; processus d'approvisionnement</h3>
+          <ul>
+            <li>Conception des appels d'offres, flux de vérification du RFE et utilisation du Programme de marchés réservés</li>
+            <li>Lacunes et obstacles internes à la participation des fournisseurs autochtones</li>
+            <li>Préparation au Plan de participation des Autochtones (PPA) le cas échéant</li>
+          </ul>
+        </div>
+        <div class="pillar reveal reveal-delay-2">
+          <div class="pillar-num">03</div>
+          <h3>Stratégie fournisseurs autochtones</h3>
+          <ul>
+            <li>Identification des fournisseurs et approche de mobilisation du RFE</li>
+            <li>Considérations liées aux zones visées par des traités modernes</li>
+            <li>Développement des relations et renforcement de la confiance à long terme</li>
+          </ul>
+        </div>
+        <div class="pillar reveal reveal-delay-3">
+          <div class="pillar-num">04</div>
+          <h3>Risques, rapports &amp; préparation des données</h3>
+          <ul>
+            <li>Suivi des contrats et intégrité des données sur la participation autochtone</li>
+            <li>Auditabilité par rapport à la cible obligatoire de 5 %</li>
+            <li>Alignement avec les exigences de déclaration annuelle de SAC</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════
+       DELIVERABLES
+  ══════════════════════════════════════ -->
+  <section id="deliverables">
+    <div class="inner">
+      <div class="reveal">
+        <h2>Ce que vous obtenez</h2>
+      </div>
+      <div class="deliverable-grid reveal reveal-delay-2">
+        <div class="deliverable">
+          <div class="deliverable-check">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p>Un portrait clair de votre état de préparation actuel par rapport aux exigences obligatoires</p>
+        </div>
+        <div class="deliverable">
+          <div class="deliverable-check">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p>Identification des lacunes, risques et vulnérabilités clés en matière de déclaration</p>
+        </div>
+        <div class="deliverable">
+          <div class="deliverable-check">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p>Recommandations stratégiques adaptées à la taille, au secteur et au mandat de votre organisation</p>
+        </div>
+        <div class="deliverable">
+          <div class="deliverable-check">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p>Une feuille de route priorisée pour passer de l'intention à une exécution structurée et auditable</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+<!-- ── SECTION 05B: PLATFORM PRODUCTS ── -->
+
+<style>
+/* ── SCOPED TO #nf-platform ONLY ── */
+
+#nf-platform *,
+#nf-platform *::before,
+#nf-platform *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#nf-platform {
+  --teal:      #06B188;
+  --teal-dark: #049a77;
+  --charcoal:  #333030;
+  --off-white: #f8f7f5;
+  --rule:      rgba(51,48,48,0.10);
+
+  position: relative;
+  width: 100%;
+  padding: 100px 28px;
+  background: #f0eeeb;
+  font-family: 'Lato', sans-serif;
+}
+
+/* ── CONTENT WRAPPER ── */
+#nf-platform .nf-platform-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* ── HEADER BLOCK ── */
+#nf-platform .nf-section-label {
+  display: block;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: nfPlatformFadeUp 0.6s 0.1s forwards;
+}
+
+#nf-platform h2.nf-platform-h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--charcoal);
+  max-width: 760px;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: nfPlatformFadeUp 0.6s 0.25s forwards;
+}
+
+#nf-platform .nf-platform-intro {
+  font-size: 0.97rem;
+  font-weight: 400;
+  line-height: 1.78;
+  color: rgba(51,48,48,0.62);
+  max-width: 720px;
+  margin-bottom: 64px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--rule);
+  opacity: 0;
+  animation: nfPlatformFadeUp 0.6s 0.4s forwards;
+}
+
+/* ── TWO PRODUCT CARDS ── */
+#nf-platform .nf-product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+#nf-platform .nf-product-card {
+  background: #ffffff;
+  border: 1px solid var(--rule);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(24px);
+}
+#nf-platform .nf-product-card.nf-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Teal top accent bar */
+#nf-platform .nf-product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--teal);
+}
+
+/* Card header bar */
+#nf-platform .nf-product-header {
+  background: var(--charcoal);
+  padding: 28px 32px 24px;
+}
+
+#nf-platform .nf-product-tag {
+  display: inline-block;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 10px;
+}
+
+#nf-platform .nf-product-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff !important;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+#nf-platform .nf-product-header p {
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.52) !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Card body */
+#nf-platform .nf-product-body {
+  padding: 32px 32px 28px;
+}
+
+/* Feature list */
+#nf-platform .nf-product-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 32px;
+}
+
+#nf-platform .nf-product-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(51,48,48,0.78);
+}
+#nf-platform .nf-product-features li:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+#nf-platform .nf-feat-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(6,177,136,0.10);
+  border: 1px solid rgba(6,177,136,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Who it serves label */
+#nf-platform .nf-product-who {
+  background: rgba(6,177,136,0.06);
+  border: 1px solid rgba(6,177,136,0.14);
+  border-radius: 3px;
+  padding: 14px 16px;
+}
+
+#nf-platform .nf-product-who-label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 6px;
+  display: block;
+}
+
+#nf-platform .nf-product-who p {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(51,48,48,0.70);
+  margin: 0;
+  padding: 0;
+}
+
+/* ── HOW THEY CONNECT ── */
+#nf-platform .nf-connect-bar {
+  background: var(--charcoal);
+  padding: 40px 44px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 32px;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(20px);
+}
+#nf-platform .nf-connect-bar.nf-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+}
+
+#nf-platform .nf-connect-side {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#nf-platform .nf-connect-side-label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+#nf-platform .nf-connect-side-text {
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.60);
+}
+
+#nf-platform .nf-connect-middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+#nf-platform .nf-connect-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(6,177,136,0.15);
+  border: 1px solid rgba(6,177,136,0.30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal);
+}
+
+#nf-platform .nf-connect-label {
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── CTA LINK ── */
+#nf-platform .nf-platform-cta {
+  margin-top: 48px;
+  padding-top: 48px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(16px);
+}
+#nf-platform .nf-platform-cta.nf-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+}
+
+#nf-platform .nf-platform-cta-text {
+  font-size: 0.97rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgba(51,48,48,0.62);
+  max-width: 560px;
+}
+
+#nf-platform .nf-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--teal);
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: 3px;
+  border: 1.5px solid var(--teal);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+  flex-shrink: 0;
+}
+#nf-platform .nf-btn-outline:hover {
+  background: var(--teal);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ── ANIMATION ── */
+@keyframes nfPlatformFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  #nf-platform .nf-product-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  #nf-platform .nf-connect-bar {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 32px 28px;
+  }
+  #nf-platform .nf-connect-middle {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  #nf-platform .nf-platform-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  #nf-platform { padding: 72px 20px; }
+  #nf-platform .nf-product-header { padding: 24px 24px 20px; }
+  #nf-platform .nf-product-body   { padding: 24px 24px 20px; }
+  #nf-platform .nf-btn-outline    { width: 100%; justify-content: center; }
+}
+</style>
+
+<!-- ── HTML ── -->
+<section id="nf-platform">
+  <div class="nf-platform-inner">
+
+    <!-- Header -->
+    <span class="nf-section-label">La plateforme de renseignement</span>
+    <h2 class="nf-platform-h2">Pour les entreprises qui soumissionnent sur les contrats que vous êtes maintenant obligés d'attribuer</h2>
+    <p class="nf-platform-intro">
+      Le diagnostic aide les organisations à comprendre et à respecter leurs obligations en matière d'approvisionnement autochtone. De l'autre côté de cette équation se trouvent les entreprises autochtones et celles à la recherche de l'équité qui concourent pour ces contrats. Nacia Forge sert les deux groupes avec deux outils conçus spécifiquement pour le marché fédéral.
+    </p>
+
+    <!-- Two product cards -->
+    <div class="nf-product-grid">
+
+      <!-- Card 1: Daily Briefing -->
+      <div class="nf-product-card" id="nf-card-briefing">
+        <div class="nf-product-header">
+          <span class="nf-product-tag">Produit 01 — Renseignement quotidien</span>
+          <h3>Bulletin quotidien Nacia Forge</h3>
+          <p>Renseignements d'approvisionnement fédéral cotés, livrés chaque matin aux abonnés — segmentés selon l'admissibilité aux programmes d'équité.</p>
+        </div>
+        <div class="nf-product-body">
+          <ul class="nf-product-features">
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Extrait en direct toutes les données de CanadaBuys chaque matin : nouvelles publications, appels d'offres ouverts et catalogue complet de l'exercice
+            </li>
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Chaque appel d'offres est coté par l'IA selon l'adéquation, le risque de titulaire sortant, les exigences de cote de sécurité et le type de véhicule contractuel
+            </li>
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Segmenté par Marchés réservés SEAA, Concurrence ouverte SEAA, Fournisseurs diversifiés PEEBC et Concurrence ouverte générale
+            </li>
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Alertes d'urgence pour les appels d'offres qui se clôturent dans les 3 jours. Aucune opportunité admissible manquée en raison du calendrier
+            </li>
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Essai gratuit de 15 jours, 150 $ CAD/mois par la suite
+            </li>
+          </ul>
+          <div class="nf-product-who">
+            <span class="nf-product-who-label">À qui cela s'adresse</span>
+            <p>Entreprises autochtones (inscrites au RFE ou en voie de l'être), entreprises appartenant à des Noirs et firmes à la recherche de l'équité dans toutes les communautés qui soumissionnent activement sur des contrats du gouvernement du Canada.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: RFP Audit -->
+      <div class="nf-product-card" id="nf-card-audit">
+        <div class="nf-product-header">
+          <span class="nf-product-tag">Produit 02 — Préparation aux soumissions</span>
+          <h3>Audit de conformité des appels d'offres</h3>
+          <p>Exigences d'appels d'offres fédéraux extraites, classées par risque et prêtes à être traitées. Rien de manqué. Rien de présumé.</p>
+        </div>
+        <div class="nf-product-body">
+          <ul class="nf-product-features">
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Téléversez n'importe quel appel d'offres fédéral ; analyse livrée sous forme de rapport PDF structuré en 24 à 48 heures
+            </li>
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Pipeline d'exigences obligatoires en plusieurs passes, élaboration d'une matrice de conformité et production d'un résumé exécutif
+            </li>
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Cote de sécurité, inscription au RFE, applicabilité des accords commerciaux et exigences de format — tous identifiés explicitement
+            </li>
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Optimisation de la cotation optionnelle et guide de réponse technique pour les mandats de niveau supérieur
+            </li>
+            <li>
+              <span class="nf-feat-icon" aria-hidden="true">
+                <svg width="10" height="10" fill="none" stroke="#06B188" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              3 500 $ – 7 500 $ CAD selon le niveau sélectionné
+            </li>
+          </ul>
+          <div class="nf-product-who">
+            <span class="nf-product-who-label">À qui cela s'adresse</span>
+            <p>Toute entreprise autochtone ou à la recherche de l'équité qui a identifié une opportunité fédérale et souhaite vérifier la conformité, évaluer les risques et élaborer une feuille de route de soumission claire avant d'investir dans l'élaboration d'une proposition.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- How they connect bar -->
+    <div class="nf-connect-bar" id="nf-connect-bar">
+      <div class="nf-connect-side">
+        <span class="nf-connect-side-label">Bulletin quotidien</span>
+        <span class="nf-connect-side-text">Identifie chaque matin les bonnes opportunités fédérales — cotées, segmentées et signalées selon l'urgence. Les abonnés savent quels appels d'offres valent la peine d'être poursuivis avant de lire un seul document.</span>
+      </div>
+      <div class="nf-connect-middle">
+        <div class="nf-connect-arrow" aria-hidden="true">
+          <svg width="16" height="16" fill="none" stroke="#06B188" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+        <span class="nf-connect-label">Connectés</span>
+      </div>
+      <div class="nf-connect-side">
+        <span class="nf-connect-side-label">Audit de conformité</span>
+        <span class="nf-connect-side-text">Une fois une opportunité identifiée, l'audit confirme chaque exigence obligatoire, signale les lacunes de conformité et produit une feuille de route de soumission — éliminant la principale raison pour laquelle les entreprises diversifiées perdent des appels d'offres pour lesquels elles étaient qualifiées.</span>
+      </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="nf-platform-cta" id="nf-platform-cta">
+      <p class="nf-platform-cta-text">
+        Les outils Nacia Forge sont disponibles dès maintenant. Le bulletin quotidien fonctionne avec un essai gratuit de 15 jours sans engagement requis. L'audit de conformité des appels d'offres est disponible sur demande pour tout appel d'offres fédéral actif.
+      </p>
+      <a href="https://daily.naciaforge.com/"
+         target="_blank"
+         rel="noopener"
+         class="nf-btn-outline">
+        Commencer votre essai gratuit
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  var cards      = document.querySelectorAll('#nf-platform .nf-product-card');
+  var connectBar = document.getElementById('nf-connect-bar');
+  var ctaBlock   = document.getElementById('nf-platform-cta');
+
+  if (!cards.length) return;
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      var el  = entry.target;
+      var idx = Array.prototype.indexOf.call(cards, el);
+      setTimeout(function () {
+        el.classList.add('nf-visible');
+      }, idx * 180);
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.10 });
+
+  cards.forEach(function (c) { observer.observe(c); });
+
+  /* Connect bar and CTA fade in as units */
+  [connectBar, ctaBlock].forEach(function (el) {
+    if (!el) return;
+    var elObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('nf-visible');
+          elObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    elObs.observe(el);
+  });
+})();
+</script>
+
+
+  <!-- ══════════════════════════════════════
+       FIT / QUALIFICATION
+  ══════════════════════════════════════ -->
+  <section id="fit">
+    <div class="inner">
+      <div class="reveal">
+        <span class="section-label">Est-ce pour vous ?</span>
+        <h2>Ce service convient particulièrement aux</h2>
+        <ul class="fit-list">
+          <li>
+            <span class="fit-check"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Ministères et organismes fédéraux assujettis à la Directive du Conseil du Trésor sur la gestion de l'approvisionnement
+          </li>
+          <li>
+            <span class="fit-check"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Sociétés d'État et grands entrepreneurs ayant des engagements actifs en matière d'approvisionnement autochtone
+          </li>
+          <li>
+            <span class="fit-check"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Organisations du secteur privé qui doivent respecter les exigences du SEAA dans le cadre d'obligations contractuelles fédérales
+          </li>
+          <li>
+            <span class="fit-check"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Équipes qui ont besoin de clarté sur l'état de préparation, le risque de déclaration, les exceptions approuvées par l'administrateur général et l'alignement interne avant le prochain cycle de déclaration fiscal
+          </li>
+          <li>
+            <span class="fit-check"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Organisations qui naviguent dans les obligations découlant des traités modernes et des accords sur l'autonomie gouvernementale parallèlement aux exigences du SEAA
+          </li>
+        </ul>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="not-fit-box">
+          <h3>Ce service ne convient pas aux</h3>
+          <ul class="not-fit-list">
+            <li>
+              <span class="not-fit-x"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
+              Organisations en phase de sensibilisation initiale sans initiatives d'approvisionnement actives en cours
+            </li>
+            <li>
+              <span class="not-fit-x"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
+              Équipes cherchant uniquement des informations générales, sans objectif de mise en œuvre
+            </li>
+            <li>
+              <span class="not-fit-x"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
+              Formations ponctuelles déconnectées de la préparation organisationnelle et de la conformité
+            </li>
+          </ul>
+          <p class="qualifier-note">Ce filtre de qualification protège votre temps et garantit que chaque mandat est positionné pour des résultats concrets.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════
+       INVESTMENT
+  ══════════════════════════════════════ -->
+  <section id="investment">
+    <div class="inner">
+      <div class="reveal">
+        <span class="section-label" style="color:rgba(6,177,136,0.85);">Investissement</span>
+        <h2>Tarification transparente</h2>
+        <p class="investment-body">
+          Les mandats de diagnostic sont délimités en fonction de la taille de l'organisation, du nombre de flux d'approvisionnement concernés et de la complexité des rapports. Nous maintenons une tarification claire dès la première conversation — sans surprises.
+        </p>
+      </div>
+      <div class="price-card reveal reveal-delay-2">
+        <div class="price-range">2 000 $ – 3 000 $</div>
+        <div class="price-unit">Fourchette d'engagement typique, selon la portée</div>
+        <div class="price-note">
+          <strong>Ce qui est inclus :</strong> Évaluation de l'état actuel dans les quatre domaines du diagnostic, conclusions écrites, recommandations stratégiques et feuille de route des prochaines étapes priorisées. Livré dans un délai convenu.<br><br>
+          <strong>Prochaine étape :</strong> Un bref entretien de qualification pour confirmer l'adéquation et la portée avant tout engagement.
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════
+       AUTHORITY
+  ══════════════════════════════════════ -->
+  <section id="authority">
+    <div class="inner">
+      <span class="section-label reveal">Pourquoi c'est important maintenant</span>
+      <h2 class="reveal reveal-delay-1">La fenêtre pour bien faire les choses, c'est maintenant</h2>
+      <p class="authority-body reveal reveal-delay-2">
+        La cible obligatoire de 5 % en matière d'approvisionnement autochtone n'est plus une attente future. La phase 3 — le dernier groupe de 44 ministères et organismes — a atteint son échéance obligatoire le 31 mars 2025. Bien que le gouvernement du Canada dans son ensemble ait dépassé la cible en 2023–24 (6,1 % de la valeur des contrats admissibles), les résultats individuels des ministères ont varié considérablement. Plusieurs grandes organisations n'ont pas atteint l'objectif. La production de rapports annuels à SAC est obligatoire. La Stratégie d'approvisionnement transformateur auprès des Autochtones (TIPS) — un processus de codéveloppement sur cinq ans lancé par SAC en 2021 — continue de faire évoluer les politiques, les mesures de protection et les exigences du programme SEAA. Les organisations qui alignent maintenant leurs systèmes, leurs données et leurs stratégies fournisseurs sont mieux positionnées pour une conformité constante et des résultats authentiques en matière de réconciliation économique.
+      </p>
+      <div class="authority-facts">
+        <div class="fact reveal reveal-delay-1">
+          <div class="fact-num">5 %</div>
+          <p>Cible minimale obligatoire ; la valeur totale des contrats fédéraux doit être attribuée annuellement à des entreprises autochtones, mesurée par rapport à tous les contrats admissibles.</p>
+          <div class="fact-source">Source : Directive du Conseil du Trésor sur la gestion de l'approvisionnement, Annexe E — en vigueur depuis le 1er avril 2022</div>
+        </div>
+        <div class="fact reveal reveal-delay-2">
+          <div class="fact-num">6,1 %</div>
+          <p>Résultat à l'échelle du gouvernement pour l'AF 2023–24 ; plus de 1,24 milliard de dollars attribués à des entreprises autochtones, dépassant la cible de 5 %. Tous les ministères ne l'ont pas atteinte individuellement.</p>
+          <div class="fact-source">Source : Rapport de SAC sur la cible minimale obligatoire de 5 %, AF 2023–24</div>
+        </div>
+        <div class="fact reveal reveal-delay-3">
+          <div class="fact-num">96</div>
+          <p>Ministères et organismes fédéraux tenus de produire des rapports annuels à SAC. Phase 3 : 44 organisations ont atteint leur échéance obligatoire le 31 mars 2025.</p>
+          <div class="fact-source">Source : Calendrier des phases de la cible minimale obligatoire de 5 % de SAC</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════
+       FINAL CTA
+  ══════════════════════════════════════ -->
+  <section id="cta-final">
+    <div class="cta-bg"></div>
+    <div class="inner">
+      <span class="section-label reveal" style="color:var(--teal);">Commencer avec clarté</span>
+      <h2 class="reveal reveal-delay-1">
+        Comprenez <em>exactement</em> où en est votre organisation.
+      </h2>
+      <p class="cta-body reveal reveal-delay-2">
+        Si votre organisation navigue actuellement dans les exigences en matière d'approvisionnement autochtone, la première étape est une évaluation claire et honnête de votre état de préparation actuel. C'est ce que le diagnostic vous apporte.
+      </p>
+      <a href="https://cal.com/nacia-forge/30min-risk-assessment" target="_blank" rel="noopener" class="btn-primary reveal reveal-delay-3">
+        Soumettre une demande de diagnostic TIPS
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <p class="cta-sub reveal reveal-delay-4">Demande → Bref appel de qualification → Début du mandat</p>
+    </div>
+  </section>
+
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>© 2026 Conseil en approvisionnement autochtone &nbsp;·&nbsp; Toutes les informations sont vérifiées auprès des sources du gouvernement du Canada.</p>
+    <p style="margin-top:6px;">Références de politique : Directive du Conseil du Trésor sur la gestion de l'approvisionnement — Annexe E (en vigueur depuis le 1er avril 2022) &nbsp;·&nbsp; Direction TIPS de Services aux Autochtones Canada &nbsp;·&nbsp; Stratégie d'approvisionnement auprès des entreprises autochtones (SEAA) &nbsp;·&nbsp; Résultats de la cible minimale obligatoire de 5 % de SAC, AF 2023–24</p>
+  </footer>
+
+
+  <!-- ── SCROLL REVEAL SCRIPT ── -->
+  <script>
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+
+
+  <!-- ── HEADER SCROLL SPY + BURGER ── -->
+  <script>
+  (function () {
+    var tabs      = document.querySelectorAll('.nf-nav-tab');
+    var sections  = ['reality','offer','nf-platform','investment','authority','cta-final'];
+    var burger    = document.getElementById('nf-burger');
+    var mobileNav = document.getElementById('nf-mobile-nav');
+    var mobileTabs = document.querySelectorAll('.nf-mobile-tab');
+
+    /* Scroll spy — highlight active tab */
+    function onScroll () {
+      var scrollY = window.scrollY + 100;
+      var active  = '';
+      sections.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollY) active = id;
+      });
+      tabs.forEach(function (tab) {
+        var href = tab.getAttribute('href').replace('#','');
+        tab.classList.toggle('nf-active', href === active);
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* Burger toggle */
+    if (burger && mobileNav) {
+      burger.addEventListener('click', function () {
+        var open = mobileNav.classList.toggle('nf-open');
+        burger.classList.toggle('nf-open', open);
+        burger.setAttribute('aria-expanded', open);
+        mobileNav.setAttribute('aria-hidden', !open);
+      });
+      /* Close drawer when a mobile tab is clicked */
+      mobileTabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          mobileNav.classList.remove('nf-open');
+          burger.classList.remove('nf-open');
+          burger.setAttribute('aria-expanded', false);
+          mobileNav.setAttribute('aria-hidden', true);
+        });
+      });
+    }
+  })();
+  </script>
+
+  <!-- ── CHAT WIDGET ── -->
+<!-- ── HTML ── -->
+<div id="nf-bot">
+
+  <!-- Floating trigger button -->
+  <button class="nf-bot-trigger" id="nf-bot-trigger" aria-label="Open Nacia Forge assistant">
+    <!-- Chat icon -->
+    <svg class="nf-icon-chat" width="22" height="22" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+    <!-- Close icon -->
+    <svg class="nf-icon-close" width="20" height="20" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24">
+      <path d="M18 6L6 18M6 6l12 12"/>
+    </svg>
+  </button>
+
+  <!-- Chat window -->
+  <div class="nf-bot-window" id="nf-bot-window" role="dialog" aria-label="Nacia Forge Assistant">
+
+    <!-- Header -->
+    <div class="nf-bot-header">
+      <div class="nf-bot-avatar" aria-hidden="true">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="nf-bot-header-text">
+        <div class="nf-bot-name">Nacia Forge Assistant</div>
+        <div class="nf-bot-status">Indigenous Procurement Advisory</div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="nf-bot-messages" id="nf-bot-messages"></div>
+
+    <!-- Input -->
+    <div class="nf-bot-input-row">
+      <textarea
+        class="nf-bot-input"
+        id="nf-bot-input"
+        placeholder="Posez une question sur la cible de 5 %, le SEAA, le RFE..."
+        rows="1"
+        aria-label="Your message"
+      ></textarea>
+      <button class="nf-bot-send" id="nf-bot-send" aria-label="Send message">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+
+  /* ── SYSTEM PROMPT ─────────────────────────────────────────────
+     All verified GoC policy facts are embedded here.
+     The bot will not guess or hallucinate — every answer is
+     grounded in this knowledge base.
+  ───────────────────────────────────────────────────────────────── */
+  var SYSTEM_PROMPT = [
+    'You are the Nacia Forge Assistant — a knowledgeable, authoritative, and direct advisor on Indigenous procurement policy for the Government of Canada.',
+    '',
+    'You work for Nacia Forge, an Indigenous procurement advisory practice based in Quebec, Canada, owned by Kaleena Bailey (founder, Indigenous from Wendake, Quebec).',
+    '',
+    'Your tone: authoritative, plain, no filler. Not a diversity chatbot. Not generic. Every answer is grounded in verified Government of Canada policy and data. Your voice is: "This is the policy. This is what it requires. Here is where you stand."',
+    '',
+    '== VERIFIED POLICY FACTS — USE EXACTLY AS STATED ==',
+    '',
+    'THE 5% MANDATORY TARGET',
+    '- Source: Treasury Board Directive on Management of Procurement, Appendix E',
+    '- Effective: April 1, 2022',
+    '- Requirement: Minimum 5% of total value of federal contracts awarded to Indigenous businesses annually',
+    '- Subject: 96 federal organizations',
+    '- Public reporting: 95 report publicly — CSIS excluded for security reasons',
+    '- Two annual reports required: (1) Performance against 5% target; (2) Procurement plans',
+    '- Phase 1: 32 organizations by FY 2022–23',
+    '- Phase 2: 20 organizations by FY 2023–24',
+    '- Phase 3: 44 organizations by March 31, 2025 — all 96 now in accountability phase',
+    '',
+    'FY 2023–24 RESULTS',
+    '- Government-wide result: $1.24B awarded = 6.11% of eligible contract value',
+    '- Year-over-year: ~$400M LESS than prior year in actual dollars (percentage up, dollars down)',
+    '- Deputy Head exceptions nearly doubled: $7.5B → $14.7B in a single year',
+    '- DND accounted for 87.7% of all exceptions',
+    '- Source: ISC Mandatory Minimum 5% Target Results, FY 2023–24',
+    '',
+    'PSIB — PROCUREMENT STRATEGY FOR INDIGENOUS BUSINESS',
+    '- In effect since 1996',
+    '- A mandatory federal procurement policy — not a diversity initiative',
+    '- Set-Aside Program: Contracts reserved exclusively for Indigenous businesses',
+    '- Mandatory set-aside triggers: (1) Geographic area where Indigenous people ≥ 51% of population; OR (2) Indigenous people are primary recipients of the good/service/construction',
+    '- All other procurements: Must consider set-aside and document decision either way',
+    '- 33% Indigenous content rule: On set-aside contracts, winning business must perform ≥ 33% of contract value itself or through qualified Indigenous subcontractors — must be written into RFP evaluation criteria AND contract terms — cannot be added after award',
+    '- IBD verification: Must happen at contract award, not RFP stage',
+    '- IPP (Indigenous Participation Plan): For large/complex procurements — prime contractor commits to a defined % to Indigenous subcontractors. Counts toward 5% target. Must be monitored post-award.',
+    '',
+    'INDIGENOUS BUSINESS DIRECTORY (IBD)',
+    '- ~3,000 businesses currently listed (exact count fluctuates)',
+    '- 51% Indigenous ownership and control required for registration',
+    '- 2023: ISC took direct responsibility for assessments — tighter, more consistent standards',
+    '- October 2024: Comprehensive integrity review launched — businesses that did not meet criteria were removed',
+    '- IBD is publicly searchable online, maintained by ISC',
+    '',
+    'MODERN TREATIES',
+    '- 25 Modern Treaties currently in effect across Canada',
+    '- 22 contain economic measures with specific procurement obligations legally binding on the Crown',
+    '- Not policy — constitutionally protected signed agreements; cannot be overridden by policy change or Deputy Head exception',
+    '- PSIB and Modern Treaty obligations operate in parallel — must check both',
+    '',
+    'TIPS — TRANSFORMATIVE INDIGENOUS PROCUREMENT STRATEGY',
+    '- Active 5-year co-development process launched 2021 by ISC',
+    '- Not completed policy — ongoing. Co-development table formed April 2024 with 40+ federal and Indigenous members',
+    '- MMF and CANDO nominated as co-chairs in 2025',
+    '',
+    'MAY 2025 PSIB COMPLIANCE AUDIT',
+    '- Completed: May 2025 by Indigenous Services Canada (internal — not third-party)',
+    '- Coverage period: April 1, 2022 to March 31, 2024',
+    '- Confirmed strengths: Strong governance framework, clear alignment with 5% target, sound accountability structure',
+    '- Identified gaps: Need for finalized standardized procedures and comprehensive checklists for complex cases; exception documentation practices under increasing scrutiny',
+    '',
+    '== NACIA FORGE SERVICES ==',
+    '',
+    'TIPS READINESS DIAGNOSTIC',
+    '- Price: $2,000–$3,000 (depending on organizational size and scope)',
+    '- Timeline: 2–3 weeks',
+    '- Output: Written findings document + prioritized roadmap',
+    '- Four pillars: (1) Governance & Policy Alignment (2) Procurement Systems & Processes (3) Indigenous Supplier Strategy (4) Risk, Reporting & Data Readiness',
+    '- This is Phase 1 of the four-phase roadmap — the starting point',
+    '',
+    'COMPLIANCE AUDIT & PROCUREMENT ANALYSIS',
+    '- Custom scope — Phase 2, follows the Diagnostic',
+    '',
+    'WORKSHOPS',
+    '- Launchpad: Teams new to PSIB',
+    '- Accelerator: Teams with experience, operationalizing PSIB systems',
+    '- Mastery: Organizations committed to high-performance Indigenous procurement',
+    '',
+    'BOOKING LINK: https://cal.com/nacia-forge/30min-compliant-assessment',
+    '',
+    '== BEHAVIOUR RULES ==',
+    '',
+    '1. Never use these words: leverage, utilize, facilitate, synergy, transformative, revolutionary, game-changer, cutting-edge, seamlessly, robust, empower, unlock, harness, tapestry, realm, landscape.',
+    '2. Never round or approximate numbers — use exact figures as stated above. Use ~ only for IBD count.',
+    '3. Never conflate PSIB (policy) with Modern Treaties (law). They operate in parallel.',
+    '4. Never overstate what sources say. The May 2025 audit "identified a need for" standardized procedures — it did not say departments are non-compliant.',
+    '5. Keep answers concise and direct. No padding. No bullet-point lists unless the question genuinely requires enumeration.',
+    '6. When a visitor signals readiness to take action, or asks how to get started, or asks about pricing and next steps — provide the booking link naturally: https://cal.com/nacia-forge/30min-compliant-assessment',
+    '7. Do not push the booking link on every message. Read the conversation. Offer it once when the moment is right.',
+    '8. You are not a lawyer or auditor. For legal determinations, recommend the visitor speak with legal counsel.',
+    '9. If asked something outside your knowledge base, say so plainly and offer to connect them via the booking link.',
+    '10. Format your responses in plain HTML — wrap paragraphs in <p> tags. For the booking link use: <a href="https://cal.com/nacia-forge/30min-compliant-assessment" target="_blank" rel="noopener">book a 30-minute assessment</a>'
+  ].join('\n');
+
+  /* ── STATE ── */
+  var history  = [];
+  var isOpen   = false;
+  var isTyping = false;
+  var greeted  = false;
+
+  /* ── DOM refs ── */
+  var trigger  = document.getElementById('nf-bot-trigger');
+  var window_  = document.getElementById('nf-bot-window');
+  var messages = document.getElementById('nf-bot-messages');
+  var input    = document.getElementById('nf-bot-input');
+  var sendBtn  = document.getElementById('nf-bot-send');
+
+  if (!trigger || !window_ || !messages || !input || !sendBtn) return;
+
+  /* ── TOGGLE ── */
+  trigger.addEventListener('click', function () {
+    isOpen = !isOpen;
+    trigger.classList.toggle('nf-open', isOpen);
+    window_.classList.toggle('nf-open', isOpen);
+
+    if (isOpen) {
+      input.focus();
+      if (!greeted) {
+        greeted = true;
+        setTimeout(function () {
+          addMessage('bot',
+            '<p>Bonjour. Je suis ici pour répondre à vos questions sur la cible obligatoire de 5 % en matière d\'approvisionnement autochtone au Canada, le SEAA, le RFE, les obligations découlant des traités modernes, et la façon dont Nacia Forge peut aider votre organisation à se préparer.</p>' +
+            '<p>Que souhaitez-vous savoir ?</p>'
+          );
+        }, 300);
+      }
+    }
+  });
+
+  /* ── ADD MESSAGE TO UI ── */
+  function addMessage (role, html) {
+    var div = document.createElement('div');
+    div.className = 'nf-msg nf-' + role;
+
+    var bubble = document.createElement('div');
+    bubble.className = 'nf-msg-bubble';
+    bubble.innerHTML = html;
+
+    div.appendChild(bubble);
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  /* ── TYPING INDICATOR ── */
+  function showTyping () {
+    var div = document.createElement('div');
+    div.className = 'nf-msg nf-bot';
+    div.id = 'nf-typing-indicator';
+
+    var indicator = document.createElement('div');
+    indicator.className = 'nf-typing';
+    indicator.innerHTML = '<span></span><span></span><span></span>';
+
+    div.appendChild(indicator);
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function hideTyping () {
+    var el = document.getElementById('nf-typing-indicator');
+    if (el) el.parentNode.removeChild(el);
+  }
+
+  /* ── SEND MESSAGE ── */
+  function send () {
+    var text = input.value.trim();
+    if (!text || isTyping) return;
+
+    input.value = '';
+    input.style.height = 'auto';
+    addMessage('user', '<p>' + escapeHtml(text) + '</p>');
+
+    history.push({ role: 'user', content: text });
+    isTyping = true;
+    sendBtn.disabled = true;
+    showTyping();
+
+    /* ── TODO: CORS PROXY REQUIRED ─────────────────────────────────────────────
+       Cloudflare Pages is a static host — browsers cannot call api.anthropic.com
+       directly due to CORS. You need a thin proxy. Two options:
+       A) Cloudflare Worker (free, <20 lines) — recommended. Deploy a Worker at
+          /api/chat on the same domain that forwards to Anthropic and adds your key.
+       B) Point this fetch at your existing Render Flask service by adding a
+          /api/chat route that proxies the Anthropic call.
+       Update PROXY_URL below once your proxy is live.
+    ──────────────────────────────────────────────────────────────────────────── */
+    var PROXY_URL = '/api/chat'; /* ← your Cloudflare Worker or Render proxy endpoint */
+
+    fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }, /* proxy adds x-api-key */
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: history
+      })
+    })
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      hideTyping();
+      isTyping = false;
+      sendBtn.disabled = false;
+
+      var reply = '';
+      if (data && data.content && data.content[0] && data.content[0].text) {
+        reply = data.content[0].text;
+      } else {
+        reply = '<p>Something went wrong on my end. Please try again or <a href="https://cal.com/nacia-forge/30min-compliant-assessment" target="_blank" rel="noopener">book a call directly</a>.</p>';
+      }
+
+      addMessage('bot', reply);
+      history.push({ role: 'assistant', content: reply });
+    })
+    .catch(function () {
+      hideTyping();
+      isTyping = false;
+      sendBtn.disabled = false;
+      addMessage('bot', '<p>I\'m having trouble connecting right now. You can <a href="https://cal.com/nacia-forge/30min-risk-assessment" target="_blank" rel="noopener">book a call directly</a> and we\'ll get you answers.</p>');
+    });
+  }
+
+  /* ── SEND BUTTON ── */
+  sendBtn.addEventListener('click', send);
+
+  /* ── ENTER TO SEND (shift+enter for newline) ── */
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
+  });
+
+  /* ── AUTO-RESIZE TEXTAREA ── */
+  input.addEventListener('input', function () {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+  });
+
+  /* ── ESCAPE HTML ── */
+  function escapeHtml (str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+})();
+</script>
+
+</body>
+</html>
