@@ -2350,28 +2350,27 @@
     sendBtn.disabled = true;
     showTyping();
 
-    /* ── TODO: CORS PROXY REQUIRED ─────────────────────────────────────────────
-       Cloudflare Pages is a static host — browsers cannot call api.anthropic.com
-       directly due to CORS. You need a thin proxy. Two options:
-       A) Cloudflare Worker (free, <20 lines) — recommended. Deploy a Worker at
-          /api/chat on the same domain that forwards to Anthropic and adds your key.
-       B) Point this fetch at your existing Render Flask service by adding a
-          /api/chat route that proxies the Anthropic call.
-       Update PROXY_URL below once your proxy is live.
-    ──────────────────────────────────────────────────────────────────────────── */
-    var PROXY_URL = '/api/chat'; /* ← your Cloudflare Worker or Render proxy endpoint */
+    /* Proxy: functions/api/chat.js — a Cloudflare Pages Function deployed
+       on this same domain. It holds the Anthropic API key server-side and
+       forwards this request to api.anthropic.com. Same-origin, no CORS
+       issue. Requires the ANTHROPIC_API_KEY environment variable to be
+       set in the Cloudflare Pages project settings. */
+    var PROXY_URL = '/api/chat';
 
     fetch(PROXY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' }, /* proxy adds x-api-key */
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-5',
         max_tokens: 1000,
         system: SYSTEM_PROMPT,
         messages: history
       })
     })
-    .then(function (res) { return res.json(); })
+    .then(function (res) {
+      if (!res.ok) throw new Error('Proxy returned ' + res.status);
+      return res.json();
+    })
     .then(function (data) {
       hideTyping();
       isTyping = false;
@@ -2391,7 +2390,7 @@
       hideTyping();
       isTyping = false;
       sendBtn.disabled = false;
-      addMessage('bot', '<p>I\'m having trouble connecting right now. You can <a href="https://cal.com/nacia-forge/30min-risk-assessment" target="_blank" rel="noopener">book a call directly</a> and we\'ll get you answers.</p>');
+      addMessage('bot', '<p>I\'m having trouble connecting right now. You can <a href="https://cal.com/nacia-forge/30min-compliant-assessment" target="_blank" rel="noopener">book a call directly</a> and we\'ll get you answers.</p>');
     });
   }
 
